@@ -154,32 +154,7 @@ Response:
 
 ---
 
-## 📸 Screenshots
 
-
-
-```
-assets/screenshots/
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/075928f9-2699-486a-b4be-3b6d1681e26a" />
-
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/69a31aa7-25b0-48d4-bc90-53a3e2b370bc" />
-
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/099059b2-5cba-4d9b-b674-2b61f73a8e9d" />
-
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/58d95da0-e352-4753-b0b9-308a6dc028cf" />
-
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/d41156ac-4873-4cf5-b247-10dc63a23992" />
-
-
-```
-
-Example:
-
-```
-![API Docs](assets/screenshots/swagger.png)
-```
-
----
 
 ⭐ Acknowledgment
 
