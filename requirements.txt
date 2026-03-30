@@ -4,6 +4,9 @@ langchain_groq
 langchain_core
 langchain_community
 pymongo
+dnspython
 fastapi
+uvicorn[standard]
+python-dotenv
 python-multipart
-uvicorn
+httpx
