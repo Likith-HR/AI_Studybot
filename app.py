@@ -35,8 +35,8 @@ collection=db["users"]
 app=FastAPI()
 
 class ChatRequest(BaseModel):
-	user_id:str
-	question:str
+    user_id:str
+    question:str
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -47,34 +47,34 @@ app.add_middleware(
 # Here * provided so that all systems could access api
 
 prompt=ChatPromptTemplate.from_messages(
-	[
-		("system",
-   		"""
-		You are an AI tutor designed to help students with their academic learning. Always provide accurate, clear, and structured explanations of concepts. 
-		- Act as a patient and supportive teacher who explains step by step. 
-		- Focus exclusively on education-related queries (subjects, concepts, study strategies). 
-		- Format answers using GitHub-flavored Markdown with headings, bullet points, tables, and LaTeX for math. 
-		- Maintain a friendly, encouraging, and professional tone. 
-		- Provide complete, contextual, and engaging responses that help students truly understand the material.
-		"""),
-		("placeholder","{history}"),
-		("user","{question}")
-	]
+    [
+        ("system",
+           """
+        You are an AI tutor designed to help students with their academic learning. Always provide accurate, clear, and structured explanations of concepts. 
+        - Act as a patient and supportive teacher who explains step by step. 
+        - Focus exclusively on education-related queries (subjects, concepts, study strategies). 
+        - Format answers using GitHub-flavored Markdown with headings, bullet points, tables, and LaTeX for math. 
+        - Maintain a friendly, encouraging, and professional tone. 
+        - Provide complete, contextual, and engaging responses that help students truly understand the material.
+        """),
+        ("placeholder","{history}"),
+        ("user","{question}")
+    ]
 )
 llm=ChatGroq(api_key=groq_api_key, model="openai/gpt-oss-20b")
 chain=prompt|llm
 
 user_id="user3445"
 def get_history(user_id):
-	chats=collection.find({"user_id":user_id}).sort("timestamp",1)
-	history=[]
-	for chat in chats:
-		history.append((chat["role"],chat["message"]))
-	return history
+    chats=collection.find({"user_id":user_id}).sort("timestamp",1)
+    history=[]
+    for chat in chats:
+        history.append((chat["role"],chat["message"]))
+    return history
 
 @app.get("/")
 def home():
-	return {"message": "Welcome to the world of curiosity."}
+    return {"message": "Welcome to the world of curiosity."}
 
 
 @app.post("/chat")
