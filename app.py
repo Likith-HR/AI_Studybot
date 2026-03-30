@@ -1,4 +1,6 @@
 import os
+import time
+from pymongo.errors import ServerSelectionTimeoutError
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq # For LLM Calling
 from langchain_core.prompts import ChatPromptTemplate
@@ -12,7 +14,22 @@ load_dotenv()
 groq_api_key=os.getenv("Groq_api_key") #stores the api key present in the folder of .env
 mongo_url=os.getenv("Mongo_url")
 
-client=MongoClient(mongo_url)
+def connect_to_mongo():
+    while True:
+        try:
+            client = MongoClient(
+            mongo_url,
+            serverSelectionTimeoutMS=5000,
+            connectTimeoutMS=5000,
+            socketTimeoutMS=5000
+            )
+            client.admin.command('ping')  # force connection check
+            print("✅ Connected to MongoDB")
+            return client
+        except ServerSelectionTimeoutError:
+            print("⏳ MongoDB not ready, retrying in 5 seconds...")
+            time.sleep(5)
+client=connect_to_mongo()
 db=client["AI_Chatbot"]
 collection=db["users"]
 app=FastAPI()
@@ -58,23 +75,35 @@ def get_history(user_id):
 @app.get("/")
 def home():
 	return {"message": "Welcome to the world of curiosity."}
+
+
 @app.post("/chat")
+def chat(request: ChatRequest):
+    try:
+        history = get_history(request.user_id)
+        res = chain.invoke({"history": history, "question": request.question})
 
-def chat(request:ChatRequest):
-	history=get_history(request.user_id)
-	res=chain.invoke({"history":history,"question":request.question})
-	collection.insert_one({
-		"user_id":request.user_id,
-		"role":"user",
-		"message":request.question,
-		"timestamp": datetime.now(timezone.utc)
-	})
-	collection.insert_one({
-		"user_id":request.user_id,
-		"role":"assistant",
-		"message":res.content,
-		"timestamp": datetime.now(timezone.utc)
-	})
+        collection.insert_one({
+            "user_id": request.user_id,
+            "role": "user",
+            "message": request.question,
+            "timestamp": datetime.now(timezone.utc)
+        })
 
-	return {"response":res.content}
-	
+        collection.insert_one({
+            "user_id": request.user_id,
+            "role": "assistant",
+            "message": res.content,
+            "timestamp": datetime.now(timezone.utc)
+        })
+
+        return {"response": res.content}
+
+ except Exception as e:
+            print("❌ Error:", e)
+            time.sleep(5)
+            return {"message": "Server is waking up, please wait a moment."}
+
+
+
+
