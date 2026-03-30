@@ -4,17 +4,6 @@ AI Studybot is an educational AI assistant designed to help students understand 
 
 The project provides a FastAPI backend that connects a large language model with persistent chat memory using MongoDB, enabling interactive tutoring experiences.
 
-
-
-🚀 Live API
-
-👉 https://ai-studybot-6fdu.onrender.com
-
-Interactive docs:
-👉 https://ai-studybot-6fdu.onrender.com/docs
-
-
-
 ✨ Features
 
 * 📚 AI tutor for academic topics
