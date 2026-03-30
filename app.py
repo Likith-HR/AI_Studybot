@@ -6,7 +6,7 @@ from langchain_groq import ChatGroq # For LLM Calling
 from langchain_core.prompts import ChatPromptTemplate
 from pymongo import MongoClient
 from datetime import datetime,timezone
-from fastapi import FastAPIp
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
